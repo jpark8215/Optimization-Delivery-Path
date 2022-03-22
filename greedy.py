@@ -46,3 +46,7 @@
 # greedyAlgorithmMinExpenses(94) # $94.00 budget
 # greedyAlgorithmMinExpenses(71) # $71.00 budget
 # greedyAlgorithmMinExpenses(200) # $200.00 budget
+# This file takes data from the distance csv file, creates vertices based on the name of the location,
+# and graphs the data using undirected edges. Each edge has a weight that represents the miles between each vertex
+
+

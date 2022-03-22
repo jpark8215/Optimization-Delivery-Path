@@ -1,299 +1,242 @@
-#
-# # The Truck Class assists in creating truck objects which will be loaded with packages
-# class Truck:
-#
-#     # Constructor to initialize packages on the truck, route, delivery start time, and mileage
-#     def __init__(self):
-#         self.truck_packages = []
-#         self.route = []
-#         self.start_time = None
-#         self.current_time = None
-#         self.finish_time = None
-#         self.speed = 0.3  # 18mph is equivalent to 0.3 miles / minute
-#
-#     # Put package on truck
-#     def insert(self, package):
-#         self.truck_packages.append(package)  # puts the package onto the truck
-#         self.route.append(package[1])  # package[1] == street address where the package is going
-#
-#     # Delivered packages are removed from the truck
-#     def remove(self, package):
-#         self.truck_packages.remove(package)  # takes the package off the truck
-#         self.route.remove(package[1])  # removes the address from the route
-#
-#     # Leave the hub and start the delivery route
-#     def start_delivery(self, time):
-#         self.start_time = time
-#
-#     # This is updated as deliveries are made
-#     def current_time(self, time):
-#         self.current_time = time
-#         return time
-#
-#     # Time that the truck finished their deliveries and is back at the hub
-#     # This will tell truck 3 when to leave (as there are only 2 drivers)
-#     def returned_to_hub(self, time):
-#         self.finish_time = time
-#         return time
-#
-#
-#
-# # Create truck objects
-# truck1 = Truck()
-# truck2 = Truck()
-# truck3 = Truck()
-#
-# # Create an iterable list of locations used in load_trucks_and_get_best_route()
-# all_addresses = []
-#
-# # Put the packages in the graph's delivery_dict to associate locations with packages
-# graph.put_packages_in_delivery_dict(package_hashtable)
-#
-#
-# # Function to load the trucks with the "correct" packages and get the best route to take
-# # "Correct" packages were first sorted by hand, and I determined what the priorities would be.
-# # Priority 1: Packages that have to be delivered by 9:00
-# # Priority 2: Packages that have to be delivered by 10:30 and are delayed_on_flight or have deliver_with special notes
-# # Priority 3: Packages that have to be delivered by 10:30 with no special notes
-# # Priority 4: Packages that have to be delivered by EOD (17:00) and delayed_on_flight, truck2_only, or wrong_address
-# # Priority 5: Packages that are EOD with no special notes, but cannot exceed the load of the trucks (16 packages)
-# # After all trucks are loaded, the greedy_path_algorithm changes the route to make it more efficient
-# # O(N^2)
-# def load_trucks_and_get_best_route():
-#
-#     # Populates the unvisited_addresses list with the locations from the graph.
-#     for location in graph.delivery_dict:
-#         all_addresses.append(location)
-#
-#     # Priority 1 (see description above)
-#     for address in all_addresses:
-#         for package in graph.delivery_dict[address]:
-#             if package[5] == "9:00":
-#                 truck1.insert(package)
-#
-#     # Priority 2 (see description above)
-#     for address in all_addresses:
-#         for package in graph.delivery_dict[address]:
-#             if package[5] == "10:30" and package[7] != "" and package[7] != "2" and package[7] != "W" and package[7] != "9:05":
-#                 truck1.insert(package)
-#             elif package [5] == "10:30" and package[7] == "9:05":
-#                 truck2.insert(package)
-#
-#     # Priority 3 (see description above)
-#     for address in all_addresses:
-#         for package in graph.delivery_dict[address]:
-#             if package[5] == "10:30" and package[7] == "":
-#                 truck1.insert(package)
-#
-#     # Priority 4 (see description above)
-#     for address in all_addresses:
-#         for package in graph.delivery_dict[address]:
-#             if package[5] == "17:00" and package[7] == "9:05":
-#                 truck2.insert(package)
-#             if package[5] == "17:00" and package[7] == "W":
-#                 truck2.insert(package)
-#             if package[5] == "17:00" and package[7] == "2":
-#                 truck2.insert(package)
-#
-#     # Priority 5 (see description above)
-#     for address in all_addresses:
-#         for package in graph.delivery_dict[address]:
-#             if package[5] == "17:00" and package[7] == "":
-#                 if len(truck1.truck_packages) < 16:
-#                     truck1.insert(package)
-#                 elif len(truck2.truck_packages) < 16:
-#                     truck2.insert(package)
-#                 elif len(truck3.truck_packages) < 16:
-#                     truck3.insert(package)
-#                 else:
-#                     print("package could not be loaded")
-#
-#     # Original, inefficient route for display purposes
-#     truck1_original_route = truck1.route
-#     truck1_original_route.append("4001 South 700 East")
-#     truck2_original_route = truck2.route
-#     truck2_original_route.append("4001 South 700 East")
-#     truck3_original_route = truck3.route
-#     truck3_original_route.append("4001 South 700 East")
-#
-#     # Change the route to make it more efficient
-#     truck1.route = greedy_path_algorithm(truck1.route)
-#     truck2.route = greedy_path_algorithm(truck2.route)
-#     truck3.route = greedy_path_algorithm(truck3.route)
-#
-#     # Route the trucks back to the hub
-#     truck1.route.append("4001 South 700 East")
-#     truck2.route.append("4001 South 700 East")
-#     truck3.route.append("4001 South 700 East")
-#
-#     # Results
-#     print("All truck & package data after loading: ")
-#     print("Truck 1 has", len(truck1.truck_packages), "packages")
-#     print("Truck 1 packages:", *truck1.truck_packages, sep="\n")
-#     print("Truck 2 has", len(truck2.truck_packages), "packages")
-#     print("Truck 2 packages:", *truck2.truck_packages, sep="\n")
-#     print("Truck 3 has", len(truck3.truck_packages), "packages")
-#     print("Truck 3 packages:", *truck3.truck_packages, sep="\n")
-#
-#
-# # Gets the miles traveled for an individual truck
-# # O(N)
-# def miles_traveled(truck_route):
-#     edge_weight_list = graph.edge_weights
-#     miles = 0
-#     for i in range(0, len(truck_route) - 1):
-#         miles = miles + edge_weight_list[truck_route[i], truck_route[i+1]]
-#     return miles
-#
-#
-# # Gets the total miles traveled by all trucks
-# # O(N)
-# def total_miles_traveled_by_all_trucks():
-#     t1_miles = miles_traveled(truck1.route)
-#     t2_miles = miles_traveled(truck2.route)
-#     t3_miles = miles_traveled(truck3.route)
-#     total = t1_miles + t2_miles + t3_miles
-#     print("Truck 1: ", round(t1_miles, 2), "+ Truck 2: ", round(t2_miles, 2),
-#           "+ Truck 3: ", round(t3_miles, 2), " TOTAL =", round(total, 2), "miles")
-#
-#
-# # Assists with stating the time of the package delivery
-# # O(1)
-# def add_seconds(time, sec):
-#     date = datetime(100, 1, 1, time.hour, time.minute, time.second)
-#     date = date + timedelta(seconds = sec)
-#     return date.time()
-#
-#
-# # This function delivers all the packages to the correct address
-# # O(N^2)
-# def deliver_packages():
-#     miles_between = graph.edge_weights
-#
-#     # Truck 1 Delivery
-#     truck1_start = datetime(2020, 1, 1, 8, 0, 0)
-#     truck1.start_time = truck1_start
-#     truck1.current_time = truck1_start
-#     for i in range(0, len(truck1.route) - 1):
-#         distance = miles_between[truck1.route[i], truck1.route[i+1]]
-#         speed = truck1.speed
-#         minutes_decimal = distance/speed
-#         seconds_to_add = round(minutes_decimal * 60, 2)
-#         delivered_time = add_seconds(truck1.current_time, seconds_to_add)
-#         truck1.current_time = datetime(2020, 1, 1, delivered_time.hour, delivered_time.minute, delivered_time.second)
-#         updated_delivery_status = "DELIVERED AT", str(delivered_time)
-#         for package in truck1.truck_packages:
-#             if truck1.route[i+1] == package[1]:
-#                 package[8] = updated_delivery_status
-#     truck1.finish_time = truck1.current_time
-#     print("Truck 1 Delivery:", *truck1.truck_packages, sep="\n")  # prints using new lines instead of a giant line
-#
-#     # Truck 2 Delivery
-#     truck2_start = datetime(2020, 1, 1, 9, 5, 0)
-#     truck2.start_time = truck2_start
-#     truck2.current_time = truck2_start
-#     for i in range(0, len(truck2.route) - 1):
-#         distance = miles_between[truck2.route[i], truck2.route[i + 1]]
-#         speed = truck2.speed
-#         minutes_decimal = distance / speed
-#         seconds_to_add = round(minutes_decimal * 60, 2)
-#         delivered_time = add_seconds(truck2.current_time, seconds_to_add)
-#         truck2.current_time = datetime(2020, 1, 1, delivered_time.hour, delivered_time.minute, delivered_time.second)
-#         updated_delivery_status = "DELIVERED AT", str(delivered_time)
-#         for package in truck2.truck_packages:
-#             if truck2.route[i + 1] == package[1]:
-#                 package[8] = updated_delivery_status
-#     truck2.finish_time = truck2.current_time
-#     print("Truck 2 Delivery:", *truck2.truck_packages, sep="\n") # prints using new lines instead of a giant line
-#
-#     # Truck 3 Delivery
-#     truck3_start = truck1.finish_time
-#     truck3.start_time = truck3_start
-#     truck3.current_time = truck3_start
-#     for i in range(0, len(truck3.route) - 1):
-#         distance = miles_between[truck3.route[i], truck3.route[i + 1]]
-#         speed = truck3.speed
-#         minutes_decimal = distance / speed
-#         seconds_to_add = round(minutes_decimal * 60, 2)
-#         delivered_time = add_seconds(truck3.current_time, seconds_to_add)
-#         truck3.current_time = datetime(2020, 1, 1, delivered_time.hour, delivered_time.minute, delivered_time.second)
-#         updated_delivery_status = "DELIVERED AT", str(delivered_time)
-#         for package in truck3.truck_packages:
-#             if truck3.route[i + 1] == package[1]:
-#                 package[8] = updated_delivery_status
-#     truck3.finish_time = truck3.current_time
-#     print("Truck 3 Delivery:", *truck3.truck_packages, sep="\n") # prints using new lines instead of a giant line
-#
-#
-# # Changes the delivery status to "out for delivery"
-# # O(N)
-# def out_for_delivery(truck_packages):
-#     for package in truck_packages:
-#         package[8] = "OUT_FOR_DELIVERY"
-#
-#
-# # Allows the user in main.py to view packages' delivery status at certain times
-# # O(N^2)
-# def see_package_status(hour, min, sec):
-#     miles_between = graph.edge_weights
-#     stop_time = datetime(2020, 1, 1, hour, min, sec)
-#
-#     # Truck 1 Delivery
-#     truck1_start = datetime(2020, 1, 1, 8, 0, 0)
-#     truck1.start_time = truck1_start
-#     truck1.current_time = truck1_start
-#     out_for_delivery(truck1.truck_packages)
-#     for i in range(0, len(truck1.route) - 1):
-#         distance = miles_between[truck1.route[i], truck1.route[i + 1]]
-#         speed = truck1.speed
-#         minutes_decimal = distance / speed
-#         seconds_to_add = round(minutes_decimal * 60, 2)
-#         delivered_time = add_seconds(truck1.current_time, seconds_to_add)
-#         if delivered_time < stop_time.time():
-#             truck1.current_time = datetime(2020, 1, 1, delivered_time.hour, delivered_time.minute, delivered_time.second)
-#             updated_delivery_status = "DELIVERED AT", str(delivered_time)
-#             for package in truck1.truck_packages:
-#                 if truck1.route[i + 1] == package[1]:
-#                     package[8] = updated_delivery_status
-#     truck1.finish_time = truck1.current_time
-#     print("Truck 1 Delivery:", *truck1.truck_packages, sep="\n")  # prints using new lines instead of a giant line
-#
-#     # Truck 2 Delivery
-#     truck2_start = datetime(2020, 1, 1, 9, 5, 0)
-#     truck2.start_time = truck2_start
-#     truck2.current_time = truck2_start
-#     out_for_delivery(truck2.truck_packages)
-#     for i in range(0, len(truck2.route) - 1):
-#         distance = miles_between[truck2.route[i], truck2.route[i + 1]]
-#         speed = truck2.speed
-#         minutes_decimal = distance / speed
-#         seconds_to_add = round(minutes_decimal * 60, 2)
-#         delivered_time = add_seconds(truck2.current_time, seconds_to_add)
-#         if delivered_time < stop_time.time():
-#             truck2.current_time = datetime(2020, 1, 1, delivered_time.hour, delivered_time.minute, delivered_time.second)
-#             updated_delivery_status = "DELIVERED AT", str(delivered_time)
-#             for package in truck2.truck_packages:
-#                 if truck2.route[i + 1] == package[1]:
-#                     package[8] = updated_delivery_status
-#     truck2.finish_time = truck2.current_time
-#     print("Truck 2 Delivery:", *truck2.truck_packages, sep="\n")  # prints using new lines instead of a giant line
-#
-#     # Truck 3 Delivery
-#     truck3_start = truck1.finish_time
-#     truck3.start_time = truck3_start
-#     truck3.current_time = truck3_start
-#     out_for_delivery(truck3.truck_packages)
-#     for i in range(0, len(truck3.route) - 1):
-#         distance = miles_between[truck3.route[i], truck3.route[i + 1]]
-#         speed = truck3.speed
-#         minutes_decimal = distance / speed
-#         seconds_to_add = round(minutes_decimal * 60, 2)
-#         delivered_time = add_seconds(truck3.current_time, seconds_to_add)
-#         if delivered_time < stop_time.time():
-#             truck3.current_time = datetime(2020, 1, 1, delivered_time.hour, delivered_time.minute, delivered_time.second)
-#             updated_delivery_status = "DELIVERED AT", str(delivered_time)
-#             for package in truck3.truck_packages:
-#                 if truck3.route[i + 1] == package[1]:
-#                     package[8] = updated_delivery_status
-#     truck3.finish_time = truck3.current_time
-#     print("Truck 3 Delivery:", *truck3.truck_packages, sep="\n")  # prints using new lines instead of a giant line
+
+# The Truck Class assists in creating truck objects which will be loaded with packages
+import csv
+
+import distance
+import greedy
+import hash
+import package
+
+
+class Truck:
+
+    # Constructor to initialize packages on the truck, route, delivery start time, and mileage
+    def __init__(self):
+        self.packages_loaded = []
+        self.route = []
+        self.start_time = None
+        self.delivery_time = None
+        self.finish_time = None
+        self.speed = 0.3  # 18mph is equivalent to 0.3 miles / minute
+
+    # Put package on truck
+    def insert(self, p):
+        self.packages_loaded.append(p)  # puts the package onto the truck
+        self.route.append(p[1])  # package[1] == street address where the package is going
+
+    # Delivered packages are removed from the truck
+    def remove(self, p):
+        self.packages_loaded.remove(p)  # takes the package off the truck
+        self.route.remove(p[1])  # removes the address from the route
+
+    # Leave the hub and start the delivery route
+    def start_delivery(self, time):
+        self.start_time = time
+
+    # This is updated as deliveries are made
+    def current_time(self, time):
+        self.delivery_time = time
+        return time
+
+    # Time that the truck finished their deliveries and is back at the hub
+    # This will tell truck 3 when to leave (as there are only 2 drivers)
+    def returned_to_hub(self, time):
+        self.finish_time = time
+        return time
+
+
+# Create truck objects
+truck1 = Truck()
+truck2 = Truck()
+truck3 = Truck()
+
+
+# these lists represent the sorted trucks that are put in order of efficiency in the function below
+first_optimized_truck = []
+first_optimized_truck_index_list = []
+second_optimized_truck = []
+second_optimized_truck_index_list = []
+third_optimized_truck = []
+third_optimized_truck_index_list = []
+first_truck_distances = []
+second_truck_distances = []
+third_truck_distances = []
+# Times the trucks leave the hub
+first_leave_times = ['8:00:00']
+second_leave_times = ['9:15:00']
+third_leave_times = ['10:30:00']
+
+
+# This is my sorting algorithm that uses a greedy approach to automate optimizing the delivery route for each truck.
+# the function takes 3 parameters (see section 1)
+# First parameter is the list of packages on a truck that has not been optimized yet
+# The second parameter represents the truck number
+# The third parameter represents the current location that is updated each time a truck moves
+
+# The base case of the algorithm is stated in the initial if statement (see section 2). This breaks the recursion
+# once the input list has a size of 0.
+# It starts by setting a "lowest value" of 50.0 and then uses the check current distance function to loop through
+# every possible point that is currently available to see if there is a lower value. If there is than the lowest
+# value is updated and the search continues (see section 3). Once it has searched through all possible routes
+# the truck can go given the available packages, it then adds that package object and associated index to
+# new lists (see section 4). To ensure that the right truck packages are being associated, the second parameter
+# is checked. If the truck truck is being sorted than the optimized delivery path will be associated to the lists
+# first_optimized_truck and first_optimized_truck_index. Each time these lists are updated, the lowest value is
+# removed from the argument list, truck_distance_list. This will allow us to update current location and recursively
+# call the function. Once the argument list is empty it will return the empty list and the function call will end.
+
+# The space-time complexity of this algorithm is O(N^2). This is due to the two for loops and the repeated lookup
+# functionality required to determine the lowest possible path then move the truck to that position.
+
+def get_shortest_route(distance_list, truck_number, current_location):
+    if not len(distance_list):
+        return distance_list
+    # print(address_list)
+
+    lowest_value = 25.0
+    new_location = 0
+
+    for distance_list_index in distance_list:
+        # value = int(i[1])
+        if distance.get_distance(current_location, int(distance_list_index[0])) <= lowest_value:
+            lowest_value = distance.get_distance(current_location, int(distance_list_index[0]))
+            new_location = int(distance_list_index[0])
+
+    for distance_list_index in distance_list:
+        if distance.get_distance(current_location, int(distance_list_index[0])) == lowest_value:
+            if truck_number == 1:
+                first_optimized_truck.append(distance_list_index)
+                first_optimized_truck_index_list.append(distance_list_index[0])
+                distance_list.pop(distance_list.index(distance_list_index))
+                current_location = new_location
+                get_shortest_route(distance_list, 1, current_location)
+            elif truck_number == 2:
+                second_optimized_truck.append(distance_list_index)
+                second_optimized_truck_index_list.append(distance_list_index[0])
+                distance_list.pop(distance_list.index(distance_list_index))
+                current_location = new_location
+                get_shortest_route(distance_list, 2, current_location)
+            elif truck_number == 3:
+                third_optimized_truck.append(distance_list_index)
+                third_optimized_truck_index_list.append(distance_list_index[0])
+                distance_list.pop(distance_list.index(distance_list_index))
+                current_location = new_location
+                get_shortest_route(distance_list, 3, current_location)
+
+
+# Insert 0 for the first index of each index list
+first_optimized_truck_index_list.insert(0, '0')
+second_optimized_truck_index_list.insert(0, '0')
+third_optimized_truck_index_list.insert(0, '0')
+
+
+def first_truck_route():
+    for index, outer in enumerate(truck1.packages_loaded):
+        for inner in distance.get_address():
+            if outer[1] == inner[2]:
+                first_truck_distances.append(outer[0])
+                truck1.packages_loaded[index][1] = inner[0]
+
+    # Call algorithm to sort packages for first truck
+    return get_shortest_route(truck1.route, 1, 0)
+
+
+# The following are all helper functions to return a desired value -> O(1)
+def first_truck_index():
+    return first_optimized_truck_index_list
+
+
+def first_truck_list():
+    return first_optimized_truck
+
+
+def first_truck_distance():
+    # Call algorithm to sort packages for first truck
+    first_truck_list()
+    total_distance_1 = 0
+
+    # Calculate total distance of the first truck and distance of each package -> O(n)
+    for index in range(len(first_truck_index())):
+        try:
+            total_distance_1 = distance.get_total_distance(int(first_truck_index()[index]), int(first_truck_index()[index + 1]), total_distance_1)
+            deliver_package = distance.get_time(distance.get_distance(int(first_truck_index()[index]), int(first_truck_index()[index + 1])), first_leave_times)
+            truck1.packages_loaded[index][10] = (str(deliver_package))
+            hash.ChainingHashTable.update(truck1.packages_loaded[index][0], truck1.packages_loaded, deliver_package)
+        except IndexError:
+            pass
+
+    return total_distance_1
+
+
+def second_truck_route():
+    for index, outer in enumerate(truck2.packages_loaded):
+        for inner in distance.get_address():
+            if outer[1] == inner[1]:
+                second_truck_distances.append(outer[0])
+                truck2.packages_loaded[index][1] = inner[0]
+
+    # Call algorithm to sort packages for first truck
+    return get_shortest_route(truck2.route, 2, 0)
+
+
+def second_truck_index():
+    return second_optimized_truck_index_list
+
+
+def second_truck_list():
+    return second_optimized_truck
+
+
+def second_truck_distance():
+    # Call algorithm to sort packages for first truck
+    second_truck_list()
+    total_distance_2 = 0
+
+    # Calculate total distance of the first truck and distance of each package -> O(n)
+    for index in range(len(second_truck_index())):
+        try:
+            total_distance_2 = distance.get_total_distance(int(second_truck_index()[index]), int(second_truck_index()[index + 1]), total_distance_2)
+            deliver_package = distance.get_time(distance.get_distance(int(second_truck_index()[index]), int(second_truck_index()[index + 1])), second_leave_times)
+            truck2.packages_loaded[index][10] = (str(deliver_package))
+            hash.ChainingHashTable.update(truck2.packages_loaded[index][0], truck2.packages_loaded, deliver_package)
+        except IndexError:
+            pass
+
+    return total_distance_2
+
+
+def third_truck_route():
+    for index, outer in enumerate(truck3.packages_loaded):
+        for inner in distance.get_address():
+            if outer[1] == inner[1]:
+                third_truck_distances.append(outer[0])
+                truck1.packages_loaded[index][1] = inner[0]
+
+    # Call algorithm to sort packages for first truck
+    return get_shortest_route(truck3.route, 3, 0)
+
+
+def third_truck_index():
+    return third_optimized_truck_index_list
+
+
+def third_truck_list():
+    return third_optimized_truck
+
+
+def third_truck_distance():
+    # Call algorithm to sort packages for first truck
+    third_truck_list()
+    total_distance_3 = 0
+
+    # Calculate total distance of the first truck and distance of each package -> O(n)
+    for index in range(len(third_truck_index())):
+        try:
+            total_distance_3 = distance.get_total_distance(int(third_truck_index()[index]), int(third_truck_index()[index + 1]), total_distance_3)
+            deliver_package = distance.get_time(distance.get_distance(int(third_truck_index()[index]), int(third_truck_index()[index + 1])), third_leave_times)
+            truck3.packages_loaded[index][10] = (str(deliver_package))
+            hash.ChainingHashTable.update(truck3.packages_loaded[index][0], truck3.packages_loaded, deliver_package)
+        except IndexError:
+            pass
+
+    return total_distance_3

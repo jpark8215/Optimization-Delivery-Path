@@ -1,5 +1,4 @@
 
-
 # HashTable class using chaining.
 # O(N)
 class ChainingHashTable:
@@ -62,3 +61,14 @@ class ChainingHashTable:
             if kv[0] == key:
                 bucket_list.remove([kv[0], kv[1]])
 
+    # Update package in hash table -> O(n)
+    def update(self, key, value):
+        bucket = hash(key) % len(self.table)
+        if self.table[bucket] is None:
+            print('There was an error with updating on key: ' + key)
+        else:
+            for pair in self.table[bucket]:
+                if pair[0] == key:
+                    pair[1] = value
+                    print(pair[1])
+                    return True
