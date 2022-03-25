@@ -1,7 +1,8 @@
 import csv
 
-# Read CSV files
 import datetime
+
+import truck
 
 with open('distance2.csv') as distance_file:
     distance_csv = list(csv.reader(distance_file, delimiter=','))
@@ -19,6 +20,7 @@ with open('distance2.csv') as distance_file:
         if distance == '':
             distance = distance_csv[col][row]
         return total + float(distance)
+        # float(distance)
 
 # This function grabs the entire distance csv file.
 # This is needed in order to create edges between vertex_a and vertex_b
@@ -50,7 +52,14 @@ with open('address.csv') as address_file:
     # This function grabs the address csv file.
     # O(N)
     def get_address():
-        address = address_csv
+        address = []
+        for row in address_csv:
+            # parse into a dictionary for easy data access later
+            address_data = [row[0], row[2]]
+            # append to list
+            address.append(address_data)
+            # row_index += 1
+        # address = address_csv
         return address
 
 # This function grabs the entire distance csv file.
@@ -64,3 +73,40 @@ with open('address.csv') as address_file:
         for row in address_csv:
             all_address_cvs.append(row)
         return all_address_cvs
+
+
+class Address:
+
+    def __init__(self, ID, address):
+        self.ID = ID
+        self.address = address
+
+    def __str__(self):  # overwrite print(Package) otherwise it will print object reference
+        return "%s, %s" % (self.ID, self.address)
+
+
+address_with_id = []
+
+
+def load_address_data(filename):
+    with open(filename) as address_file:
+        address_data = csv.reader(address_file, delimiter=',')
+        next(address_data)  # skip header
+        for a in address_data:
+            aID = int(a[0])
+            aAddress = a[2]
+
+            address_with_id.insert(aID, aAddress)
+
+
+load_address_data('address.csv')
+
+
+def get_address_number(location):
+    var = int
+    for index, outer in enumerate(truck.truck1.route):
+        for inner in get_address():
+            if outer == inner[1]:
+                var = inner[0]
+    return var
+

@@ -1,5 +1,4 @@
 import csv
-
 import truck
 from hash import ChainingHashTable
 
@@ -37,9 +36,9 @@ def load_package_data(filename):
             pDeadline = p[5]
             pWeight = p[6]
             pNote = p[7]
-            pStart = ''
-            pLocation = ''
-            pStatus = 'At hub'
+            pStart = p[8]
+            pLocation = p[9]
+            pStatus = p[10]
 
             if pDeadline == '9:00 AM' and pNote == '':
                 truck.truck1.insert(p)
@@ -94,3 +93,8 @@ def get_package():
     # Fetch data from Hash Table
     for i in range(len(package_hash.table) + 1):
         print("Package: {}".format(package_hash.search(i + 1)))  # 1 to 11 is sent to myHash.search()
+
+
+def search_package(ID):
+    result = package_hash.search(ID)
+    print(result)
