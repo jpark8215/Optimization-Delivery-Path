@@ -1,22 +1,22 @@
 # Jieun Park 001216539
-
+import distance
 import greedy
 import package
 import truck
 
 # print(package.get_package())
 
-print(truck.truck1.packages_loaded)
-print(truck.truck2.packages_loaded)
-print(truck.truck3.packages_loaded)
-
-print(len(truck.truck1.packages_loaded))
-print(len(truck.truck2.packages_loaded))
-print(len(truck.truck3.packages_loaded))
-
+# print(truck.truck1.packages_loaded)
+# print(truck.truck2.packages_loaded)
+# print(truck.truck3.packages_loaded)
+#
+# print(len(truck.truck1.packages_loaded))
+# print(len(truck.truck2.packages_loaded))
+# print(len(truck.truck3.packages_loaded))
+#
 # print(distance.get_all_distance_csv_data())
 # print(distance.get_all_address_csv_data())
-
+#
 # print("All truck & package data after loading: ")
 # print("Truck 1 has", len(truck.truck1.packages_loaded), "packages")
 # print("Truck 1 packages:", *truck.truck1.packages_loaded, sep="\n")
@@ -25,20 +25,17 @@ print(len(truck.truck3.packages_loaded))
 # print("Truck 3 has", len(truck.truck3.packages_loaded), "packages")
 # print("Truck 3 packages:", *truck.truck3.packages_loaded, sep="\n")
 
-print(truck.truck1.route)
-print(truck.truck2.route)
-print(truck.truck3.route)
 
-# print("Truck Route:", truck.first_truck_route())
+print("Truck index:", greedy.first_truck_index())
+print("Truck index:", greedy.second_truck_index())
+print("Truck index:", greedy.third_truck_index())
 
-# print("Truck index:", greedy.first_truck_index())
-# print("Truck index:", greedy.second_truck_index())
-# print("Truck index:", greedy.third_truck_index())
-#
-# print("Truck list:", greedy.first_truck_list())
-# print("Truck list:", greedy.second_truck_list())
-# print("Truck list:", greedy.third_truck_list())
+print("Truck list:", greedy.first_truck_list())
+print("Truck list:", greedy.second_truck_list())
+print("Truck list:", greedy.third_truck_list())
 
+print(greedy.deliver_packages())
+# print(greedy.get_distance())
 # instructions = '''
 # Please select an option from the list:
 #     1. Get info on a specific package

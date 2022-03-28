@@ -20,7 +20,6 @@ with open('distance2.csv') as distance_file:
         if distance == '':
             distance = distance_csv[col][row]
         return total + float(distance)
-        # float(distance)
 
 # This function grabs the entire distance csv file.
 # This is needed in order to create edges between vertex_a and vertex_b
@@ -34,16 +33,13 @@ with open('distance2.csv') as distance_file:
         return all_distance_cvs
 
     # Calculate total distance for a given truck -> O(n)
-    def get_time(distance, truck_list):
-        new_time = distance / 18
-        distance_in_minutes = '{0:02.0f}:{1:02.0f}'.format(*divmod(new_time * 60, 60))
-        final_time = distance_in_minutes + ':00'
-        truck_list.append(final_time)
-        total = datetime.timedelta()
-        for i in truck_list:
-            (hrs, mins, secs) = i.split(':')
-            total += datetime.timedelta(hours=int(hrs), minutes=int(mins), seconds=int(secs))
-        return total
+    def get_time(distance, delivery_list):
+        time = distance / 18
+        hours = int(8) + int(time)
+        minutes = (time * 60) % 60
+        seconds = (time * 3600) % 60
+        final_time = "%d:%02d:%02d" % (hours, minutes, seconds)
+        return final_time
 
 
 with open('address.csv') as address_file:
@@ -75,38 +71,37 @@ with open('address.csv') as address_file:
         return all_address_cvs
 
 
-class Address:
+# class Address:
+#
+#     def __init__(self, ID, address):
+#         self.ID = ID
+#         self.address = address
+#
+#     def __str__(self):  # overwrite print(Package) otherwise it will print object reference
+#         return "%s, %s" % (self.ID, self.address)
+#
 
-    def __init__(self, ID, address):
-        self.ID = ID
-        self.address = address
-
-    def __str__(self):  # overwrite print(Package) otherwise it will print object reference
-        return "%s, %s" % (self.ID, self.address)
-
-
-address_with_id = []
-
-
-def load_address_data(filename):
-    with open(filename) as address_file:
-        address_data = csv.reader(address_file, delimiter=',')
-        next(address_data)  # skip header
-        for a in address_data:
-            aID = int(a[0])
-            aAddress = a[2]
-
-            address_with_id.insert(aID, aAddress)
-
-
-load_address_data('address.csv')
-
-
-def get_address_number(location):
-    var = int
-    for index, outer in enumerate(truck.truck1.route):
-        for inner in get_address():
-            if outer == inner[1]:
-                var = inner[0]
-    return var
-
+# address_with_id = []
+#
+#
+# def load_address_data(filename):
+#     with open(filename) as address_file:
+#         address_data = csv.reader(address_file, delimiter=',')
+#         next(address_data)  # skip header
+#         for a in address_data:
+#             aID = int(a[0])
+#             aAddress = a[2]
+#
+#             address_with_id.insert(aID, aAddress)
+#
+#
+# load_address_data('address.csv')
+#
+#
+# def get_address_number(location):
+#     var = int
+#     for index, outer in enumerate(truck.truck1.route):
+#         for inner in get_address():
+#             if outer == inner[1]:
+#                 var = inner[0]
+#     return var

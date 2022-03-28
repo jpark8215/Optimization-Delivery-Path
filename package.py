@@ -5,6 +5,7 @@ from hash import ChainingHashTable
 
 # Package class constructor
 class Package:
+    status = ['At hub', 'En route', 'Delivered']
 
     def __init__(self, ID, address, city, state, zip, deadline, weight, note, start, location, status):
         self.ID = ID
