@@ -25,16 +25,20 @@ import truck
 # print("Truck 3 has", len(truck.truck3.packages_loaded), "packages")
 # print("Truck 3 packages:", *truck.truck3.packages_loaded, sep="\n")
 
+print("Truck index:", greedy.first_optimized_truck_index_list)
+print("Truck index:", greedy.second_optimized_truck_index_list)
+print("Truck index:", greedy.third_optimized_truck_index_list)
+#
+# print("Truck list:", greedy.first_optimized_truck)
+# print("Truck list:", greedy.second_optimized_truck)
+# print("Truck list:", greedy.third_optimized_truck)
 
-print("Truck index:", greedy.first_truck_index())
-print("Truck index:", greedy.second_truck_index())
-print("Truck index:", greedy.third_truck_index())
+print(greedy.get_it())
+print(greedy.first_truck_packages)
 
-print("Truck list:", greedy.first_truck_list())
-print("Truck list:", greedy.second_truck_list())
-print("Truck list:", greedy.third_truck_list())
+# print(*greedy.first_delivery, sep="\n")
 
-print(greedy.deliver_packages())
+
 # print(greedy.get_distance())
 # instructions = '''
 # Please select an option from the list:

@@ -1,4 +1,3 @@
-
 # This file takes data from the distance csv file, creates vertices based on the name of the location,
 # and graphs the data using undirected edges. Each edge has a weight that represents the miles between each vertex
 from datetime import datetime
@@ -71,55 +70,6 @@ def get_shortest_route(truck_route_list, truck_number, current_location):
                         get_shortest_route(truck_route_list, truck_number, current_location)
 
     index += 1
-    # return first_optimized_truck
-
-
-get_shortest_route(truck.truck1.route, 1, 0)
-
-
-def first_truck_list():
-    return first_optimized_truck
-
-
-# Insert 0 for the first index of each index list
-first_optimized_truck_index_list.insert(0, '0')
-
-
-# The following are all helper functions to return a desired value -> O(1)
-def first_truck_index():
-    return first_optimized_truck_index_list
-
-
-get_shortest_route(truck.truck2.route, 2, 0)
-
-
-def second_truck_list():
-    return second_optimized_truck
-
-
-# Insert 0 for the first index of each index list
-second_optimized_truck_index_list.insert(0, '0')
-
-
-# The following are all helper functions to return a desired value -> O(1)
-def second_truck_index():
-    return second_optimized_truck_index_list
-
-
-get_shortest_route(truck.truck3.route, 3, 0)
-
-
-def third_truck_list():
-    return third_optimized_truck
-
-
-# Insert 0 for the first index of each index list
-third_optimized_truck_index_list.insert(0, '0')
-
-
-# The following are all helper functions to return a desired value -> O(1)
-def third_truck_index():
-    return third_optimized_truck_index_list
 
 
 # Empty lists created
@@ -136,42 +86,60 @@ first_leave_times = ['8:00:00']
 second_leave_times = ['9:05:00']
 third_leave_times = ['10:00:00']
 
-
 # Set delivery_start to first_leave_time for all truck one packages -> O(n)
-def deliver_packages():
-    total_distance_1 = 0
-    delivered_time = None
+for index, value in enumerate(truck.truck1.packages_loaded):
+    truck.truck1.packages_loaded[index][9] = first_leave_times[0]
+    first_delivery.append(truck.truck1.packages_loaded[index])
 
-    for outer in first_optimized_truck:
-        for index, inner in enumerate(truck.truck1.packages_loaded):
-            if outer == inner[1]:
-                truck.truck1.packages_loaded[index][8] = first_leave_times[0]
-                first_delivery.append(truck.truck1.packages_loaded[index])
+# Compare truck one addresses to address list -> O(n^2)
+for index, outer in enumerate(first_delivery):
+    for inner in distance.get_address():
+        if outer[1] == inner[1]:
+            first_delivery[index][1] = inner[0]
 
-    # Compare truck one addresses to address list -> O(n^2)
-    for index, outer in enumerate(first_delivery):
-        for inner in distance.get_address():
-            if outer[1] == inner[1]:
-                first_truck_packages.append(outer[0])
-                first_delivery[index][1] = inner[0]
+get_shortest_route(truck.truck1.route, 1, 0)
 
-    # Calculate total distance of the first truck and distance of each package -> O(n)
-    for index in range(len(first_optimized_truck_index_list) - 1):
-        total_distance_1 = distance.get_total_distance(int(first_optimized_truck_index_list[index]),
-                                                       int(first_optimized_truck_index_list[index + 1]),
-                                                       total_distance_1)
-        delivered_time = distance.get_time(total_distance_1, first_delivery)
+# Insert 0 for the first index of each index list
+first_optimized_truck_index_list.insert(0, '0')
+first_optimized_truck_index_list.append('0')
 
-    return total_distance_1, delivered_time
+get_shortest_route(truck.truck2.route, 2, 0)
 
-# deliver_packages()
-# first_delivery[index][10] = str(deliver_packages().index(1))
-# package.package_hash.update(int(first_delivery[0]), first_delivery)
+# Insert 0 for the first index of each index list
+second_optimized_truck_index_list.insert(0, '0')
+second_optimized_truck_index_list.append('0')
+
+get_shortest_route(truck.truck3.route, 3, 0)
+
+# Insert 0 for the first index of each index list
+third_optimized_truck_index_list.insert(0, '0')
+third_optimized_truck_index_list.append('0')
 
 
+def get_it():
+    first_truck_total_distance = 0
+    # first_truck_package_id = 0
+
+    for index in first_optimized_truck_index_list:
+        for inner in first_delivery:
+            if index == inner[1]:
+                first_truck_packages.append(inner[1])
 
 
+                # # calculate the total distance of the truck
+                # first_truck_total_distance = distance.get_total_distance(int(first_optimized_truck_index_list[index - 1]),
+                #                                                          int(first_optimized_truck_index_list[
+                #                                                                  index]),
+                #                                                          first_truck_total_distance)
+                # # calculate the distance of each package along the route
+                # deliver_package = distance.get_time(distance.get_distance(int(first_optimized_truck_index_list[index - 1]),
+                #                                                           int(first_optimized_truck_index_list[
+                #                                                                   index])),
+                #                                     first_delivery)
+                #
+                #
+                # first_delivery[index][10] = (str(deliver_package))
+                # package.package_hash.update(int(first_truck_packages[index][0]), first_delivery)
+    # first_truck_package_id += 1
 
-
-
-
+    # print(first_truck_total_distance)
