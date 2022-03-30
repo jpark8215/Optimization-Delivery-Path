@@ -7,7 +7,7 @@ from hash import ChainingHashTable
 class Package:
     status = ['At hub', 'En route', 'Delivered']
 
-    def __init__(self, ID, address, city, state, zip, deadline, weight, note, start, location, status):
+    def __init__(self, ID, address, city, state, zip, deadline, weight, note, start, time_at_location, delivered_time):
         self.ID = ID
         self.address = address
         self.city = city
@@ -17,8 +17,8 @@ class Package:
         self.weight = weight
         self.note = note
         self.start = start
-        self.location = location
-        self.status = status
+        self.location = time_at_location
+        self.status = delivered_time
 
     def __str__(self):  # overwrite print(Package) otherwise it will print object reference
         return "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (self.ID, self.address, self.city, self.state, self.zip, self.deadline, self.weight, self.note, self.start, self.location, self.status )

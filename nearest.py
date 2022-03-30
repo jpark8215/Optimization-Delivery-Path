@@ -97,7 +97,7 @@ for index, value in enumerate(truck.truck2.packages_loaded):
     truck.truck2.packages_loaded[index][8] = truck.truck2.start_time
 
 for index, value in enumerate(truck.truck3.packages_loaded):
-    truck.truck3.start_delivery('10:00:00')
+    truck.truck3.start_delivery('10:35:00')
     truck.truck3.packages_loaded[index][8] = truck.truck3.start_time
 
 
@@ -126,19 +126,31 @@ third_optimized_truck_index_list.insert(0, '0')
 third_optimized_truck_index_list.append('0')
 
 
-first_truck_total_distance = 0
+def get_distance_and_time(optimized_truck_index_list, optimized_packages_list):
+    truck_total_distance = 0
 
-for i in range(len(first_optimized_truck_index_list) - 1):
-    # calculate the total distance of the truck
-    first_truck_total_distance = distance.get_total_distance(int(first_optimized_truck_index_list[i]),
-                                                             int(first_optimized_truck_index_list[i + 1]),
-                                                             first_truck_total_distance)
-    delivered_time = distance.get_time(first_truck_total_distance)
+    for i in range(len(optimized_truck_index_list) - 1):
+        # calculate the total distance of the truck
+        truck_total_distance = distance.get_total_distance(int(optimized_truck_index_list[i]),
+                                                           int(optimized_truck_index_list[i + 1]),
+                                                           truck_total_distance)
+        delivered_time = distance.get_time(truck_total_distance, optimized_packages_list)
 
-    first_optimized_packages_list[i][10] = str(delivered_time)
-    if i == int(len(first_optimized_truck_index_list) - 1):
-        return_to_hub_time = delivered_time
-        truck.truck1.back_to_hub(return_to_hub_time)
-    package.package_hash.update(int(first_optimized_packages_list[i][0]), first_optimized_packages_list)
+        if i < int(len(optimized_truck_index_list) - 2):
+            optimized_packages_list[i][10] = str(delivered_time)
+            package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
+
+        elif i == int(len(optimized_truck_index_list) - 1):
+            truck.Truck.back_to_hub = delivered_time
+            # truck.back_to_hub(back_to_hub)
+
+        for i in range(len(optimized_truck_index_list) - 2):
+            optimized_packages_list[i][9] = str(delivered_time)
+            package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
 
 
+# get_distance_and_time(first_optimized_truck_index_list, first_optimized_packages_list)
+#
+# get_distance_and_time(second_optimized_truck_index_list, second_optimized_packages_list)
+#
+# get_distance_and_time(third_optimized_truck_index_list, third_optimized_packages_list)
