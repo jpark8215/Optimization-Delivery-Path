@@ -33,11 +33,13 @@ with open('distance2.csv') as distance_file:
         return all_distance_cvs
 
     # Calculate total distance for a given truck -> O(n)
-    def get_time(distance, delivery_list):
+    def get_time(distance):
         time = distance / 18
         hours = int(8) + int(time)
         minutes = (time * 60) % 60
         seconds = (time * 3600) % 60
+        if distance == 0:
+            seconds = 1
         final_time = "%d:%02d:%02d" % (hours, minutes, seconds)
         return final_time
 

@@ -1,6 +1,6 @@
 # Jieun Park 001216539
 import distance
-import greedy
+import nearest
 import package
 import truck
 
@@ -25,21 +25,25 @@ import truck
 # print("Truck 3 has", len(truck.truck3.packages_loaded), "packages")
 # print("Truck 3 packages:", *truck.truck3.packages_loaded, sep="\n")
 
-print("Truck index:", greedy.first_optimized_truck_index_list)
-print("Truck index:", greedy.second_optimized_truck_index_list)
-print("Truck index:", greedy.third_optimized_truck_index_list)
+print("Truck index:", nearest.first_optimized_truck_index_list)
+print("Truck index:", nearest.second_optimized_truck_index_list)
+print("Truck index:", nearest.third_optimized_truck_index_list)
 #
-# print("Truck list:", greedy.first_optimized_truck)
-# print("Truck list:", greedy.second_optimized_truck)
-# print("Truck list:", greedy.third_optimized_truck)
-
-print(greedy.get_it())
-print(greedy.first_truck_packages)
-
-# print(*greedy.first_delivery, sep="\n")
+print("Truck list:", nearest.first_optimized_truck_address)
+print("Truck list:", nearest.second_optimized_truck_address)
+print("Truck list:", nearest.third_optimized_truck_address)
 
 
-# print(greedy.get_distance())
+print('first')
+print(*nearest.get_optimized_package_list(nearest.first_optimized_truck_address, truck.truck1.packages_loaded, nearest.first_optimized_packages_list), sep="\n")
+print('second')
+print(*nearest.get_optimized_package_list(nearest.second_optimized_truck_address, truck.truck2.packages_loaded, nearest.second_optimized_packages_list), sep="\n")
+print('third')
+print(*nearest.get_optimized_package_list(nearest.third_optimized_truck_address, truck.truck3.packages_loaded, nearest.third_optimized_packages_list), sep="\n")
+
+
+
+
 # instructions = '''
 # Please select an option from the list:
 #     1. Get info on a specific package
