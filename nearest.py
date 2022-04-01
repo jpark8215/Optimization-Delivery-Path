@@ -1,9 +1,9 @@
 # This file takes data from the distance csv file, creates vertices based on the name of the location,
 # and graphs the data using undirected edges. Each edge has a weight that represents the miles between each vertex
+import time
 from datetime import datetime
 
 import distance
-import hash
 import package
 import truck
 
@@ -16,8 +16,8 @@ third_optimized_truck_index_list = []
 
 
 def get_minimum_distance(truck_route_list, truck_number, current_location):
-    if not truck_route_list:
-        return truck_route_list
+    # if not truck_route_list:
+    #     return truck_route_list
 
     route_list_index = 0
     dist_list = []
@@ -37,8 +37,8 @@ def get_minimum_distance(truck_route_list, truck_number, current_location):
 
 # get route from Truck and optimize the route using nearest
 def get_shortest_route(truck_route_list, truck_number, current_location):
-    if not len(truck_route_list):
-        return truck_route_list
+    # if not len(truck_route_list):
+    #     return truck_route_list
 
     route_list_index = 0
 
@@ -77,7 +77,6 @@ third_optimized_packages_list = []
 
 
 def get_optimized_package_list(optimized_truck_address, truck_packages, optimized_packages_list):
-
     for location_index in enumerate(optimized_truck_address):
         for package_index, value in enumerate(truck_packages):
             if location_index[1] == value[1]:
@@ -99,7 +98,6 @@ for index, value in enumerate(truck.truck2.packages_loaded):
 for index, value in enumerate(truck.truck3.packages_loaded):
     truck.truck3.start_delivery('10:35:00')
     truck.truck3.packages_loaded[index][8] = truck.truck3.start_time
-
 
 get_shortest_route(truck.truck1.route, 1, 0)
 
@@ -128,6 +126,7 @@ third_optimized_truck_index_list.append('0')
 
 def get_distance_and_time(optimized_truck_index_list, optimized_packages_list):
     truck_total_distance = 0
+    delivery_total_distance = 0
 
     for i in range(len(optimized_truck_index_list) - 1):
         # calculate the total distance of the truck
@@ -137,20 +136,36 @@ def get_distance_and_time(optimized_truck_index_list, optimized_packages_list):
         delivered_time = distance.get_time(truck_total_distance, optimized_packages_list)
 
         if i < int(len(optimized_truck_index_list) - 2):
+            delivery_total_distance = truck_total_distance
             optimized_packages_list[i][10] = str(delivered_time)
             package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
 
         elif i == int(len(optimized_truck_index_list) - 1):
-            truck.Truck.back_to_hub = delivered_time
-            # truck.back_to_hub(back_to_hub)
+            optimized_packages_list[i][9] = str(delivered_time)
+            package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
 
         for i in range(len(optimized_truck_index_list) - 2):
             optimized_packages_list[i][9] = str(delivered_time)
             package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
 
+    return delivery_total_distance
 
-# get_distance_and_time(first_optimized_truck_index_list, first_optimized_packages_list)
-#
-# get_distance_and_time(second_optimized_truck_index_list, second_optimized_packages_list)
-#
-# get_distance_and_time(third_optimized_truck_index_list, third_optimized_packages_list)
+
+def first_truck_distance():
+    truck_one_distance = get_distance_and_time(first_optimized_truck_index_list, first_optimized_packages_list)
+    return truck_one_distance
+
+
+def second_truck_distance():
+    truck_two_distance = get_distance_and_time(second_optimized_truck_index_list, second_optimized_packages_list)
+    return truck_two_distance
+
+
+def third_truck_distance():
+    truck_three_distance = get_distance_and_time(third_optimized_truck_index_list, third_optimized_packages_list)
+    return truck_three_distance
+
+
+def get_overall_distance():
+    overall_distance = first_truck_distance() + second_truck_distance() + third_truck_distance()
+    return overall_distance

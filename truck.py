@@ -9,8 +9,8 @@ class Truck:
         self.packages_loaded = []
         self.route = []
         self.start_time = None
-        self.delivered_time = None
-        self.finish_time = None
+        self.delivery_time = None
+        self.end_time = None
 
     # Put package on truck
     def insert(self, p):
@@ -23,28 +23,17 @@ class Truck:
         self.route.remove(p[1])  # removes the address from the route
 
     # Leave the hub and start the delivery route
-    def start_delivery(self, time):
-        self.start_time = time
+    def start_delivery(self, start):
+        self.start_time = start
 
-    # This is updated as deliveries are made
-    def current_time(self, time):
-        self.delivered_time = time
-        return time
+    def location_time(self, current):
+        self.delivery_time = current
 
-    # Time that the truck finished their deliveries and is back at the hub
-    # This will tell truck 3 when to leave (as there are only 2 drivers)
-    def back_to_hub(self, time):
-        self.finish_time = time
-        return time
+    def back_to_hub_time(self, end):
+        self.end_time = end
 
 
 # Create truck objects
 truck1 = Truck()
 truck2 = Truck()
 truck3 = Truck()
-
-
-
-
-
-
