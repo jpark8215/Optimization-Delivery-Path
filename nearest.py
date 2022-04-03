@@ -202,8 +202,10 @@ status_updated_list = []
 
 
 def get_status(t):
+
     status_updated_list.append(update_packages_status(t, first_optimized_packages_list))
     status_updated_list.append(update_packages_status(t, second_optimized_packages_list))
     status_updated_list.append(update_packages_status(t, third_optimized_packages_list))
-    return status_updated_list
+
+    print(package.get_package())
 

@@ -101,10 +101,18 @@ load_package_data('package.csv')
 def get_package():
     print("Packages from Hashtable:")
     # Fetch data from Hash Table
-    for i in range(len(package_hash.table) + 1):
+    for i in range(len(package_hash.table) + 30):
         print("Package: {}".format(package_hash.search(i + 1)))  # 1 to 11 is sent to myHash.search()
 
 
 def search_package(id):
-    result = package_hash.search(id)
+    package = package_hash.search(id)
+    number = package[0]
+    address = package[1]
+    deadline = package[5]
+    city = package[2]
+    zipcode = package[4]
+    weight = package[6]
+    status = package[11]
+    result = " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " + status + "\n "
     print(result)
