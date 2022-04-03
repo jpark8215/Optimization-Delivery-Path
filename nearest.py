@@ -15,6 +15,11 @@ third_optimized_truck_address = []
 third_optimized_truck_index_list = []
 
 
+def convert_to_time(t):
+    dt_obj = time.strptime(t, "%H:%M:%S")
+    return dt_obj
+
+
 def get_minimum_distance(truck_route_list, truck_number, current_location):
     # if not truck_route_list:
     #     return truck_route_list
@@ -96,7 +101,7 @@ for index, value in enumerate(truck.truck2.packages_loaded):
     truck.truck2.packages_loaded[index][8] = truck.truck2.start_time
 
 for index, value in enumerate(truck.truck3.packages_loaded):
-    truck.truck3.start_delivery('10:35:00')
+    truck.truck3.start_delivery('10:32:40')
     truck.truck3.packages_loaded[index][8] = truck.truck3.start_time
 
 get_shortest_route(truck.truck1.route, 1, 0)
@@ -124,29 +129,37 @@ third_optimized_truck_index_list.insert(0, '0')
 third_optimized_truck_index_list.append('0')
 
 
-def get_distance_and_time(optimized_truck_index_list, optimized_packages_list):
+def get_distance_and_time(optimized_truck_index_list, optimized_packages_list_time):
     truck_total_distance = 0
     delivery_total_distance = 0
 
+    for i in range(len(optimized_packages_list_time)):
+        if optimized_packages_list_time[i][9] == '':
+            optimized_packages_list_time[i][9] = '0:00:00'
+        if optimized_packages_list_time[i][10] == '':
+            optimized_packages_list_time[i][10] = '0:00:00'
+
     for i in range(len(optimized_truck_index_list) - 1):
+
         # calculate the total distance of the truck
         truck_total_distance = distance.get_total_distance(int(optimized_truck_index_list[i]),
                                                            int(optimized_truck_index_list[i + 1]),
                                                            truck_total_distance)
-        delivered_time = distance.get_time(truck_total_distance, optimized_packages_list)
+        delivered_time = distance.get_time(truck_total_distance, optimized_packages_list_time)
 
         if i < int(len(optimized_truck_index_list) - 2):
             delivery_total_distance = truck_total_distance
-            optimized_packages_list[i][10] = str(delivered_time)
-            package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
+            optimized_packages_list_time[i][10] = str(delivered_time)
+            # package.package_hash.update(int(optimized_packages_list_time[i][0]), optimized_packages_list_time)
 
         elif i == int(len(optimized_truck_index_list) - 1):
-            optimized_packages_list[i][9] = str(delivered_time)
-            package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
+            optimized_packages_list_time[i][9] = str(delivered_time)
+            # package.package_hash.update(int(optimized_packages_list_time[i][0]), optimized_packages_list_time)
 
+        # updating current location time
         for i in range(len(optimized_truck_index_list) - 2):
-            optimized_packages_list[i][9] = str(delivered_time)
-            package.package_hash.update(int(optimized_packages_list[i][0]), optimized_packages_list)
+            optimized_packages_list_time[i][9] = str(delivered_time)
+            # package.package_hash.update(int(optimized_packages_list_time[i][0]), optimized_packages_list_time)
 
     return delivery_total_distance
 
@@ -169,3 +182,28 @@ def third_truck_distance():
 def get_overall_distance():
     overall_distance = first_truck_distance() + second_truck_distance() + third_truck_distance()
     return overall_distance
+
+
+def update_packages_status(t, optimized_packages_list_status):
+    for i in range(len(optimized_packages_list_status)):
+        if convert_to_time(optimized_packages_list_status[i][8]) >= convert_to_time(t):
+            optimized_packages_list_status[i].append('At hub')
+            # package.package_hash.update(int(optimized_packages_list_status[i][0]), optimized_packages_list_status)
+        elif convert_to_time(optimized_packages_list_status[i][10]) < convert_to_time(t):
+            optimized_packages_list_status[i].append('Delivered')
+            # package.package_hash.update(int(optimized_packages_list_status[i][0]), optimized_packages_list_status)
+        else:
+            optimized_packages_list_status[i].append('En route')
+            # package.package_hash.update(int(optimized_packages_list_status[i][0]), optimized_packages_list_status)
+    return optimized_packages_list_status
+
+
+status_updated_list = []
+
+
+def get_status(t):
+    status_updated_list.append(update_packages_status(t, first_optimized_packages_list))
+    status_updated_list.append(update_packages_status(t, second_optimized_packages_list))
+    status_updated_list.append(update_packages_status(t, third_optimized_packages_list))
+    return status_updated_list
+

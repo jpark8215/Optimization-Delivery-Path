@@ -6,7 +6,7 @@ from hash import ChainingHashTable
 # Package class constructor
 class Package:
 
-    def __init__(self, id, address, city, state, zip, deadline, weight, note, start, time_at_location, delivered_time):
+    def __init__(self, id, address, city, state, zip, deadline, weight, note, start, time_at_location, delivered_time, status):
         self.ID = id
         self.address = address
         self.city = city
@@ -17,12 +17,13 @@ class Package:
         self.note = note
         self.start = start
         self.location = time_at_location
-        self.status = delivered_time
+        self.delivered = delivered_time
+        self.status = status
 
     def __str__(self):  # overwrite print(Package) otherwise it will print object reference
-        return "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (
+        return "%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s" % (
             self.ID, self.address, self.city, self.state, self.zip, self.deadline, self.weight, self.note, self.start,
-            self.location, self.status)
+            self.location, self.delivered, self.status)
 
 
 def load_package_data(filename):
@@ -40,7 +41,8 @@ def load_package_data(filename):
             p_note = p[7]
             p_start = p[8]
             p_location = p[9]
-            p_status = p[10]
+            p_delivered = p[10]
+            p_status = ''
 
             if p_deadline == '9:00 AM':
                 truck.truck1.insert(p)
@@ -83,7 +85,7 @@ def load_package_data(filename):
                     print("package could not be loaded", p_id)
 
             # p object p = Package(p_id, p_address, p_city, p_state, p_zip, p_deadline, p_weight, p_note, p_start,
-            # p_location, p_status)
+            # p_location, p_delivered)
 
             # insert it into the hash table
             package_hash.insert(p_id, p)
@@ -103,6 +105,6 @@ def get_package():
         print("Package: {}".format(package_hash.search(i + 1)))  # 1 to 11 is sent to myHash.search()
 
 
-def search_package(p_id):
-    result = package_hash.search(p_id)
+def search_package(id):
+    result = package_hash.search(id)
     print(result)

@@ -1,6 +1,4 @@
 # The Truck Class assists in creating truck objects which will be loaded with packages
-import distance
-
 
 class Truck:
 
@@ -9,8 +7,6 @@ class Truck:
         self.packages_loaded = []
         self.route = []
         self.start_time = None
-        self.delivery_time = None
-        self.end_time = None
 
     # Put package on truck
     def insert(self, p):
@@ -25,12 +21,6 @@ class Truck:
     # Leave the hub and start the delivery route
     def start_delivery(self, start):
         self.start_time = start
-
-    def location_time(self, current):
-        self.delivery_time = current
-
-    def back_to_hub_time(self, end):
-        self.end_time = end
 
 
 # Create truck objects
