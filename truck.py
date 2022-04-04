@@ -1,29 +1,29 @@
-# The Truck Class assists in creating truck objects which will be loaded with packages
-
+# Truck class constructor
+# Assists in creating truck objects with packages
+# Initializes packages on the truck, route, and delivery start time
 class Truck:
 
-    # Constructor to initialize packages on the truck, route, delivery start time, and mileage
     def __init__(self):
         self.packages_loaded = []
         self.route = []
         self.start_time = None
 
-    # Put package on truck
+    # Adds package on truck
     def insert(self, p):
-        self.packages_loaded.append(p)  # puts the package onto the truck
-        self.route.append(p[1])  # package[1] == street address where the package is going
+        self.packages_loaded.append(p)
+        self.route.append(p[1])
 
-    # Delivered packages are removed from the truck
+    # Removes optimized packages from truck
     def remove(self, p):
         self.packages_loaded.remove(p)  # takes the package off the truck
         self.route.remove(p[1])  # removes the address from the route
 
-    # Leave the hub and start the delivery route
+    # Leaves hub and starts delivery
     def start_delivery(self, start):
         self.start_time = start
 
 
-# Create truck objects
+# Creates truck objects
 truck1 = Truck()
 truck2 = Truck()
 truck3 = Truck()

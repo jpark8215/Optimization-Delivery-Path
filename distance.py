@@ -3,7 +3,8 @@ import csv
 with open('distance2.csv') as distance_file:
     distance_csv = list(csv.reader(distance_file, delimiter=','))
 
-    # Calculate the total distance from row/column values -> O(1)
+    # O(1)
+    # Calculates distance from row/column values
     def get_distance(row, col):
         distance = distance_csv[row][col]
         if distance == '':
@@ -11,7 +12,8 @@ with open('distance2.csv') as distance_file:
 
         return float(distance)
 
-    # Calculate the total distance from row/column values -> O(1)
+    # O(1)
+    # Calculates total distance from row/column values
     def get_total_distance(row, col, total):
         distance = distance_csv[row][col]
         if distance == '':
@@ -19,9 +21,8 @@ with open('distance2.csv') as distance_file:
 
         return total + float(distance)
 
-# This function grabs the entire distance csv file.
-# This is needed in order to create edges between vertex_a and vertex_b
-# O(N)
+    # O(N)
+    # Gets entire distance from csv file
     def get_all_distance_csv_data():
         all_distance_cvs = []
         for row in distance_csv:
@@ -29,7 +30,9 @@ with open('distance2.csv') as distance_file:
 
         return all_distance_cvs
 
-    # Calculate total distance for a given truck -> O(n)
+    # O(N)
+    # Converts start time into base time
+    # Adds base time to time calculated by dividing total distance from nearest.py by speed
     def get_time(distance, optimized_packages_list):
         base_time = 0.0
 
@@ -49,20 +52,17 @@ with open('distance2.csv') as distance_file:
 with open('address.csv') as address_file:
     address_csv = list(csv.reader(address_file, delimiter=','))
 
-    # This function grabs the address csv file.
     # O(N)
+    # Gets address id and address from csv file
     def get_address():
         address = []
         for row in address_csv:
-            # parse into a dictionary for easy data access later
             address_data = [row[0], row[2]]
-            # append to list
             address.append(address_data)
         return address
 
-# This function grabs the entire distance csv file.
-# This is needed in order to create edges between vertex_a and vertex_b
-# O(N)
+    # O(N)
+    # Gets all address data from csv file
     def get_all_address_csv_data():
         all_address_cvs = []
         for row in address_csv:
