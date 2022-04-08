@@ -3,6 +3,7 @@ import time
 import distance
 import package
 import truck
+
 '''
 SET first_optimized_truck_address TO []
 SET first_optimized_truck_index_list TO []
@@ -216,7 +217,6 @@ def get_minimum_distance(truck_route_list, truck_number, current_location):
 # O(N2)
 # Gets route from truck.py for each truck and optimizes the route using nearest neighbor algorithm
 def get_shortest_route(truck_route_list, truck_number, current_location):
-
     route_list_index = 0
 
     # Compares truck routes distance starting shortest route in list
@@ -274,20 +274,17 @@ for index, value in enumerate(truck.truck1.packages_loaded):
     truck.truck1.start_delivery('8:00:00')
     truck.truck1.packages_loaded[index][8] = truck.truck1.start_time
 
-
 # O(N)
 # Sets start delivery time to truck two and updates truck package start time
 for index, value in enumerate(truck.truck2.packages_loaded):
     truck.truck2.start_delivery('9:05:00')
     truck.truck2.packages_loaded[index][8] = truck.truck2.start_time
 
-
 # O(N)
 # Sets start delivery time to truck three and updates truck package start time
 for index, value in enumerate(truck.truck3.packages_loaded):
     truck.truck3.start_delivery('10:32:40')
     truck.truck3.packages_loaded[index][8] = truck.truck3.start_time
-
 
 # Runs shortest route and optimize package list methods for truck one
 get_shortest_route(truck.truck1.route, 1, 0)
@@ -298,7 +295,6 @@ get_optimized_package_list(first_optimized_truck_address, truck.truck1.packages_
 first_optimized_truck_index_list.insert(0, '0')
 first_optimized_truck_index_list.append('0')
 
-
 # Runs shortest route and optimize package list methods for truck two
 get_shortest_route(truck.truck2.route, 2, 0)
 
@@ -307,7 +303,6 @@ get_optimized_package_list(second_optimized_truck_address, truck.truck2.packages
 # Insert 0 to index list as truck leaves and returns to hub
 second_optimized_truck_index_list.insert(0, '0')
 second_optimized_truck_index_list.append('0')
-
 
 # Runs shortest route and optimize package list methods for truck three
 get_shortest_route(truck.truck3.route, 3, 0)

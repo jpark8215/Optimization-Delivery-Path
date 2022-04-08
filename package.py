@@ -96,8 +96,15 @@ load_package_data('package.csv')
 
 DEFINE FUNCTION get_package():
     FOR i IN range(len(package_hash.table) + 30):
-        OUTPUT("Package: {}".format(package_hash.search(i + 1)))
-
+        SET package TO package_hash.search(i + 1)
+        SET number TO package[0]
+        SET address TO package[1]
+        SET deadline TO package[5]
+        SET zipcode TO package[4]
+        SET status TO package[11]
+        SET result TO number + ': ' + address + ' ' + zipcode + ' by ' + deadline + ' >> ' + status
+        OUTPUT("Package {} ".format(result))
+            
 
 DEFINE FUNCTION search_package(id):
     SET package TO package_hash.search(id)
@@ -217,7 +224,14 @@ load_package_data('package.csv')
 # Gets data from hash table
 def get_package():
     for i in range(len(package_hash.table) + 30):
-        print("Package: {}".format(package_hash.search(i + 1)))
+        package = package_hash.search(i + 1)
+        number = package[0]
+        address = package[1]
+        deadline = package[5]
+        zipcode = package[4]
+        status = package[11]
+        result = number + ': ' + address + ' ' + zipcode + ' by ' + deadline + ' >> ' + status
+        print("Package {} ".format(result))
 
 
 # O(1)
