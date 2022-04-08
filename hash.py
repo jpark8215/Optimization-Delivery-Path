@@ -1,7 +1,57 @@
+"""
+DEFINE CLASS ChainingHashTable:
+
+    DEFINE FUNCTION __init__(self, initial_capacity=10):
+        SET self.table TO []
+        FOR i IN range(initial_capacity):
+            self.table.append([])
+
+    DEFINE FUNCTION insert(self, key, item):
+        SET bucket TO hash(key) % len(self.table)
+        SET bucket_list TO self.table[bucket]
+        FOR kv IN bucket_list:
+            IF kv[0] EQUALS key:
+                SET kv[1] TO item
+                RETURN True
+
+        SET key_value TO [key, item]
+        bucket_list.append(key_value)
+        RETURN True
+
+    DEFINE FUNCTION search(self, key):
+        SET bucket TO hash(key) % len(self.table)
+        SET bucket_list TO self.table[bucket]
+        FOR kv IN bucket_list:
+            IF kv[0] EQUALS key:
+                RETURN kv[1]
+        RETURN None
+
+    DEFINE FUNCTION remove(self, key):
+        SET bucket TO hash(key) % len(self.table)
+        SET bucket_list TO self.table[bucket]
+        FOR kv IN bucket_list:
+            IF kv[0] EQUALS key:
+                bucket_list.remove([kv[0], kv[1]])
+
+    DEFINE FUNCTION update(self, key, value):
+        SET bucket TO hash(key) % len(self.table)
+        IF self.table[bucket] is None:
+            OUTPUT('Error with updating key #: ' + key)
+
+        ELSE:
+            FOR kv IN self.table[bucket]:
+                IF kv[0] EQUALS key:
+                    SET kv[1] TO value
+                    OUTPUT(kv[1])
+                    RETURN True
+"""
+
+
 # O(N)
 # HashTable class using chaining.
 class ChainingHashTable:
 
+    # O(N)
     # Constructor with optional initial capacity parameter
     # Assigns all buckets with an empty list
     def __init__(self, initial_capacity=10):
@@ -10,7 +60,7 @@ class ChainingHashTable:
         for i in range(initial_capacity):
             self.table.append([])
 
-    # O(1)
+    # O(N)
     # Inserts a new item into the hash table
     def insert(self, key, item):
         # Gets bucket list where an item goes
