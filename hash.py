@@ -80,6 +80,7 @@ class ChainingHashTable:
     # O(N)
     # Searches for an item with matching key in hash table
     # Returns the item if found, or None if not found
+    # Used in package.py to search package status
     def search(self, key):
         # Gets bucket list where the key is
         bucket = hash(key) % len(self.table)

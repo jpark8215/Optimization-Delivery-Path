@@ -199,7 +199,7 @@ def convert_to_time(t):
 
 # O(N2)
 # Gets list of locations from each truck from truck.py and adds them to list
-# Returns smallest number from list
+# Returns smallest number from the list
 def get_minimum_distance(truck_route_list, truck_number, current_location):
     route_list_index = 0
     distance_list = []
@@ -229,7 +229,7 @@ def get_shortest_route(truck_route_list, truck_number, current_location):
                 shortest_distance = get_minimum_distance(truck_route_list, truck_number, current_location)
 
                 # Adds optimized route index and address to lists
-                # Removes data from truck route list when added to optimized list
+                # Removes added package path from truck route list and runs algorithm until there is no package left
                 if dist == shortest_distance:
                     if truck_number == 1:
                         first_optimized_truck_index_list.append(inner[0])
@@ -294,7 +294,7 @@ get_shortest_route(truck.truck1.route, 1, 0)
 # Optimizes package list for truck one
 get_optimized_package_list(first_optimized_truck_address, truck.truck1.packages_loaded, first_optimized_packages_list)
 
-# Insert 0 to index list as truck leaves and returns to hub
+# Inserts 0 to index list as truck leaves and returns to hub
 first_optimized_truck_index_list.insert(0, '0')
 first_optimized_truck_index_list.append('0')
 
@@ -303,7 +303,7 @@ get_shortest_route(truck.truck2.route, 2, 0)
 # Optimizes package list for truck two
 get_optimized_package_list(second_optimized_truck_address, truck.truck2.packages_loaded, second_optimized_packages_list)
 
-# Insert 0 to index list as truck leaves and returns to hub
+# Inserts 0 to index list as truck leaves and returns to hub
 second_optimized_truck_index_list.insert(0, '0')
 second_optimized_truck_index_list.append('0')
 
@@ -312,7 +312,7 @@ get_shortest_route(truck.truck3.route, 3, 0)
 # Optimizes package list for truck three
 get_optimized_package_list(third_optimized_truck_address, truck.truck3.packages_loaded, third_optimized_packages_list)
 
-# Insert 0 to index list as truck leaves and returns to hub
+# Inserts 0 to index list as truck leaves and returns to hub
 third_optimized_truck_index_list.insert(0, '0')
 third_optimized_truck_index_list.append('0')
 
@@ -325,7 +325,7 @@ def get_distance_and_time(optimized_truck_index_list, optimized_packages_list_ti
     truck_total_distance = 0
     delivery_total_distance = 0
 
-    # Replaces empty string to time format for comparison
+    # Replaces empty string to time format for time conversion
     for i in range(len(optimized_packages_list_time)):
         if optimized_packages_list_time[i][9] == '':
             optimized_packages_list_time[i][9] = '0:00:00'
@@ -360,21 +360,21 @@ def get_distance_and_time(optimized_truck_index_list, optimized_packages_list_ti
 
 
 # O(1)
-# Returns total distance for first truck and adds time to list
+# Returns total distance for first truck and adds time to optimized package list
 def first_truck_distance():
     truck_one_distance = get_distance_and_time(first_optimized_truck_index_list, first_optimized_packages_list)
     return truck_one_distance
 
 
 # O(1)
-# Returns total distance for second truck and adds time to list
+# Returns total distance for second truck and adds time to optimized package list
 def second_truck_distance():
     truck_two_distance = get_distance_and_time(second_optimized_truck_index_list, second_optimized_packages_list)
     return truck_two_distance
 
 
 # O(1)
-# Returns total distance for third truck and adds time to list
+# Returns total distance for third truck and adds time to optimized package list
 def third_truck_distance():
     truck_three_distance = get_distance_and_time(third_optimized_truck_index_list, third_optimized_packages_list)
     return truck_three_distance
@@ -382,6 +382,7 @@ def third_truck_distance():
 
 # O(1)
 # Gets overall distance for all three trucks
+# Returns overall distance and called in main.py
 def get_overall_distance():
     overall_distance = first_truck_distance() + second_truck_distance() + third_truck_distance()
     return overall_distance

@@ -60,6 +60,7 @@ with open('distance2.csv') as distance_file:
 
     # O(1)
     # Gets distance from row/column values
+    # Used in greedy.pt to get distance between current location and next
     def get_distance(row, col):
         distance = distance_csv[row][col]
         if distance == '':
@@ -69,6 +70,7 @@ with open('distance2.csv') as distance_file:
 
     # O(1)
     # Gets distance from row/column values and adds the value to previously obtained sum
+    # Used in greedy.py to get total distance traveled by truck(s)
     def get_total_distance(row, col, total):
         distance = distance_csv[row][col]
         if distance == '':
@@ -119,6 +121,7 @@ with open('address.csv') as address_file:
 
     # O(N)
     # Gets all address data from csv file and stores in list
+    # Used in greedy.py to get address index that will be used to get distance
     def get_all_address_csv_data():
         all_address_cvs = []
         for row in address_csv:
