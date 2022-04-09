@@ -26,7 +26,7 @@ SET truck3 TO Truck()
 
 # Truck class constructor
 # Assists in creating truck objects with packages
-# Initializes packages on the truck, route, and delivery start time
+# Initializes packages on truck, route, and delivery start time
 class Truck:
 
     # O(1)
@@ -37,18 +37,20 @@ class Truck:
 
     # O(1)
     # Adds package on truck
+    # Adds all package data to truck package list and address to route list
     def insert(self, p):
         self.packages_loaded.append(p)
         self.route.append(p[1])
 
     # O(1)
     # Removes optimized packages from truck
+    # Removes package from truck package list and address from route list
     def remove(self, p):
-        self.packages_loaded.remove(p)  # takes the package off the truck
-        self.route.remove(p[1])  # removes the address from the route
+        self.packages_loaded.remove(p)
+        self.route.remove(p[1])
 
     # O(1)
-    # Leaves hub and starts delivery
+    # Sets time for truck leaving hub and starting delivery
     def start_delivery(self, start):
         self.start_time = start
 

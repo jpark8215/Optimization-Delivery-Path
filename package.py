@@ -148,7 +148,7 @@ class Package:
 
 
 # O(N)
-# Gets package data from csv file and assigns data meaningful names
+# Gets package data from csv file and assigns variables
 def load_package_data(filename):
     with open(filename) as package_file:
         package_data = csv.reader(package_file, delimiter=',')
@@ -186,6 +186,7 @@ def load_package_data(filename):
             if p_deadline == 'EOD' and p_zip == '84119' and p_note != 'Can only be on truck 2':
                 truck.truck3.insert(p)
 
+            # Updates wrong address
             if p_deadline == 'EOD' and p_note == 'Wrong address listed':
                 p[1] = '410 S State St'
                 p[4] = '84111'
@@ -197,7 +198,7 @@ def load_package_data(filename):
             if p_deadline == 'EOD' and p_zip == '84115':
                 truck.truck3.insert(p)
 
-            # Checks packages that are not loaded and adds to trucks
+            # Checks packages that are not loaded in any truck and adds them
             if p not in truck.truck1.packages_loaded and p not in truck.truck2.packages_loaded and p not in truck.truck3.packages_loaded:
                 if len(truck.truck2.packages_loaded) < 12:
                     truck.truck2.insert(p)
@@ -213,17 +214,18 @@ def load_package_data(filename):
             package_hash.insert(p_id, p)
 
 
-# Hash table instance
+# Creates ash table instance
 package_hash = ChainingHashTable()
 
-# Loads packages to hash Table
+# Loads package data to hash Table
 load_package_data('package.csv')
 
 
 # O(N)
-# Gets data from hash table
+# Gets all data from hash table to display status at certain time
+# Used in main.py
 def get_package():
-    for i in range(len(package_hash.table) + 30):
+    for i in range(len(package_hash.table) + 29):
         package = package_hash.search(i + 1)
         number = package[0]
         address = package[1]
@@ -235,7 +237,8 @@ def get_package():
 
 
 # O(1)
-# Searches data with id from hash table and returns selected data
+# Searches package data with id from hash table and returns selected data
+# Used in main.py
 def search_package(id):
     package = package_hash.search(id)
     number = package[0]

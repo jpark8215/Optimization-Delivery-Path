@@ -48,30 +48,31 @@ DEFINE CLASS ChainingHashTable:
 
 
 # O(N)
-# HashTable class using chaining.
+# Ref: zyBooks: Figure 7.8.2: Hash table using chaining
+# HashTable class using chaining
 class ChainingHashTable:
 
     # O(N)
     # Constructor with optional initial capacity parameter
-    # Assigns all buckets with an empty list
-    def __init__(self, initial_capacity=10):
+    # Assigns all buckets with empty list
+    def __init__(self, initial_capacity=11):
         # Initializes hash table with empty bucket list entries
         self.table = []
         for i in range(initial_capacity):
             self.table.append([])
 
     # O(N)
-    # Inserts a new item into the hash table
+    # Inserts new item into hash table
     def insert(self, key, item):
         # Gets bucket list where an item goes
         bucket = hash(key) % len(self.table)
         bucket_list = self.table[bucket]
-        # Updates key if it is already in the bucket
+        # Updates key if it is already in bucket
         for kv in bucket_list:
             if kv[0] == key:
                 kv[1] = item
                 return True
-        # If not, insert the item to the end of bucket list
+        # Else insert the item to the end of bucket list
         key_value = [key, item]
         bucket_list.append(key_value)
         return True
@@ -90,9 +91,9 @@ class ChainingHashTable:
         return None
 
     # O(N)
-    # Removes an item with matching key from hash table
+    # Removes item with matching key from hash table
     def remove(self, key):
-        # get the bucket list where this item will be removed from.
+        # Gets bucket list where the item will be removed from
         bucket = hash(key) % len(self.table)
         bucket_list = self.table[bucket]
         # Removes the item from bucket list if it is present
@@ -104,6 +105,7 @@ class ChainingHashTable:
     # Updates package in hash table
     def update(self, key, value):
         bucket = hash(key) % len(self.table)
+        # Prints error message if hash table is empty
         if self.table[bucket] is None:
             print('Error with updating key #: ' + key)
         else:

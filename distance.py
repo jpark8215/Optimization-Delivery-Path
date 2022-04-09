@@ -54,12 +54,12 @@ with open('address.csv') as address_file:
             all_address_cvs.append(row)
         RETURN all_address_cvs 
 '''
-
+# Gets data from file and stores in list
 with open('distance2.csv') as distance_file:
     distance_csv = list(csv.reader(distance_file, delimiter=','))
 
     # O(1)
-    # Calculates distance from row/column values
+    # Gets distance from row/column values
     def get_distance(row, col):
         distance = distance_csv[row][col]
         if distance == '':
@@ -68,7 +68,7 @@ with open('distance2.csv') as distance_file:
         return float(distance)
 
     # O(1)
-    # Calculates total distance from row/column values
+    # Gets distance from row/column values and adds the value to previously obtained sum
     def get_total_distance(row, col, total):
         distance = distance_csv[row][col]
         if distance == '':
@@ -77,7 +77,7 @@ with open('distance2.csv') as distance_file:
         return total + float(distance)
 
     # O(N)
-    # Gets entire distance from csv file
+    # Gets entire distance data from csv file and stores in list
     def get_all_distance_csv_data():
         all_distance_cvs = []
         for row in distance_csv:
@@ -86,8 +86,9 @@ with open('distance2.csv') as distance_file:
         return all_distance_cvs
 
     # O(N)
-    # Converts start time into base time
-    # Adds base time to time calculated by dividing total distance from greedy.py by speed
+    # Converts start time in index 8 of optimized list from greedy.py into base time
+    # Adds base time and time calculated by dividing total distance from greedy.py by speed
+    # Returns delivered time of package
     def get_time(distance, optimized_packages_list):
         base_time = 0.0
 
@@ -103,12 +104,12 @@ with open('distance2.csv') as distance_file:
 
         return final_time
 
-
+# Gets data from file and stores in list
 with open('address.csv') as address_file:
     address_csv = list(csv.reader(address_file, delimiter=','))
 
     # O(N)
-    # Gets address id and address from csv file
+    # Gets address id and address from csv file and stores in list
     def get_address():
         address = []
         for row in address_csv:
@@ -117,7 +118,7 @@ with open('address.csv') as address_file:
         return address
 
     # O(N)
-    # Gets all address data from csv file
+    # Gets all address data from csv file and stores in list
     def get_all_address_csv_data():
         all_address_cvs = []
         for row in address_csv:
