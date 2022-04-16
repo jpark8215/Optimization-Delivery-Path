@@ -102,7 +102,11 @@ DEFINE FUNCTION get_package():
         SET deadline TO package[5]
         SET zipcode TO package[4]
         SET status TO package[11]
-        SET result TO number + ': ' + address + ' ' + zipcode + ' by ' + deadline + ' >> ' + status
+        SET time TO package[10]
+        IF status EQUALS 'Delivered':
+            SET result TO number + ': ' + address + ' ' + zipcode + ' by ' + deadline + ' >> ' + status + ' at ' + time
+        ELSE:
+            SET result TO number + ': ' + address + ' ' + zipcode + ' by ' + deadline + ' >> ' + status        
         OUTPUT("Package {} ".format(result))
             
 
@@ -114,10 +118,16 @@ DEFINE FUNCTION search_package(id):
     SET city TO package[2]
     SET zipcode TO package[4]
     SET weight TO package[6]
+    SET time TO package[10]
     SET status TO package[11]
-    SET result TO " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " \
-             + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " \
-             + status + "\n "
+    IF status EQUALS 'Delivered':
+        SET result TO " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " \
+                 + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " \
+                 + status + "\n " + "Delivered at " + time + "\n "
+    ELSE:
+        SET result TO " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " \
+                 + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " \
+                 + status + "\n " + "Estimated delivery: " + time + "\n "
     OUTPUT(result)
 '''
 
@@ -229,10 +239,15 @@ def get_package():
         package = package_hash.search(i + 1)
         number = package[0]
         address = package[1]
+        city = package[2]
         deadline = package[5]
         zipcode = package[4]
         status = package[11]
-        result = number + ': ' + address + ' ' + zipcode + ' by ' + deadline + ' >> ' + status
+        time = package[10]
+        if status == 'Delivered':
+            result = number + ': ' + address + ', ' + city + ' ' + zipcode + ' by ' + deadline + ' >> ' + status + ' at ' + time
+        else:
+            result = number + ': ' + address + ', ' + city + ' ' + zipcode + ' by ' + deadline + ' >> ' + status
         print("Package {} ".format(result))
 
 
@@ -247,8 +262,14 @@ def search_package(id):
     city = package[2]
     zipcode = package[4]
     weight = package[6]
+    time = package[10]
     status = package[11]
-    result = " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " \
-             + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " \
-             + status + "\n "
+    if status == 'Delivered':
+        result = " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " \
+                 + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " \
+                 + status + "\n " + "Delivered at " + time + "\n "
+    else:
+        result = " Package #: " + number + "\n " + "Address: " + address + "\n " + "Deadline: " + deadline + "\n " \
+                 + "City: " + city + "\n " + "Zipcode: " + zipcode + "\n " + "Weight: " + weight + "\n " + "Status: " \
+                 + status + "\n " + "Estimated delivery: " + time + "\n "
     print(result)
