@@ -1,58 +1,99 @@
-# Jieun Park 001216539
-
 import sys
+import pandas as pd
+import matplotlib.pyplot as plt
+from sklearn.metrics import accuracy_score
+import project
 
-import greedy
-import hash
-import package
-
-'''
-OUTPUT("All packages were delivered IN " + str(float("{:.2f}".format(greedy.get_overall_distance()))) + " miles.\n")
-
-WHILE True:
-OUTPUT("\n1> Check Status")
-OUTPUT("2> Package Search")
-OUTPUT("0> Exit Application\n")
-OUTPUT(Notification)
-
-SET selected TO INPUT("Please enter an option above: ")
-
-IF selected EQUALS '0':
-    sys.exit()
-    
-IF selected EQUALS '1':
-    greedy.get_status(INPUT("Enter time IN 'HH:MM:SS' format: \n"))
-    package.get_package()
-
-    OUTPUT("\nWould you like to check the status of a package? \n2> Check status of individual package")
-
-IF selected EQUALS '2':
-    package.search_package(int(INPUT("\nPlease enter package ID you would like to check: ")))
-'''
-
-
-# Gets overall distance from greedy.py and display total mileage in 2 decimal point
-print("All packages were delivered in " + str(float("{:.2f}".format(greedy.get_overall_distance()))) + " miles.\n")
-
-# O(N)
-# Displays all packages including status at the specific time chosen when user selects number 1
-# Displays details of selected package when user select 2 at the specific time chosen from option number 1
 while True:
-    print("1> Check Status of all packages")
+
+    print("1> View graphs")
+    print("2> Training set performance")
+    print("3> PREDICTION on test set")
     print("0> Exit Application\n")
-    print("**Please exit application and rerun to check package status for different time**\n")
 
     selected = input("Please enter an option above: ")
 
     if selected == '0':
         sys.exit()
 
-    # Updates package status list from greedy.py and gets updated status from package.py
+    # option 1
     if selected == '1':
-        greedy.get_status(input("Enter time in 'HH:MM:SS' format: "))
-        package.get_package()
-        print("\nWould you like to check the status of a package? \n2> Check status of individual package")
+        print("Hello. Welcome to vaccine predictor! \n"
+              "* The following three charts show vaccine status of population we gathered data from. \n"
+              "* The first chart will show you the proportion of vaccine status on the training population. \n"
+              "  0 means no vaccine received and 1 means vaccine received. \n"
+              "* The second chart will show you the H1N1 vaccine status based on the concerns. \n"
+              "  0 means no vaccine received or has no concerns. And 1 means vaccine received or has concerns. \n"
+              "* The third chart will show the H1N1 and seasonal flu vaccine status based on opinion on vaccine. \n"
+              "  0 means no vaccine received or negative opinion. And 1 means vaccine received or positive opinion. \n")
 
-    # Gets individual package status from package.py
+        # first chart
+        project.vac_rate()
+        # second chart
+        project.vac_rate_concern()
+        # third chart
+        cols_to_plot = [
+            'opinion_h1n1_vacc_effective',
+            'opinion_h1n1_risk',
+            'opinion_seas_vacc_effective',
+            'opinion_seas_risk',
+        ]
+
+        fig, ax = plt.subplots(len(cols_to_plot), 2, figsize=(10, len(cols_to_plot) * 3))
+        for idx, col in enumerate(cols_to_plot):
+            project.vac_rate_op(col, 'h1n1_vaccine', project.df_all, ax=ax[idx, 0])
+            project.vac_rate_op(col, 'seasonal_vaccine', project.df_all, ax=ax[idx, 1])
+
+        ax[0, 0].legend(loc='best', title='vaccine status')
+        # ax[0, 0].legend(loc='best', title='H1N1 vaccine')
+        # ax[0, 1].legend(loc='best', title='Seasonal vaccine')
+        fig.tight_layout()
+        plt.show()
+
+    # option 2
     if selected == '2':
-        package.search_package(int(input("\nPlease enter package ID you would like to check: ")))
+        print("* The chart will show you AUC-ROC curve for H1N1 and seasonal flu vaccine prediction on training set. \n"
+              "AUC - ROC curve is a classification problem performance measurement. \n"
+              "AOC is the area under the ROC curve, which is probability \n"
+              "that a randomly chosen positive case is ranked higher than a randomly chosen negative case. \n"
+              "ROC is calculated by the true positive rate (TPR) against the false positive rate (FPR).\n"
+              "* The accuracy score on training set is as shown below. \n")
+        # accuracy score of training set
+        project.full_pipeline.fit(project.df1, project.df2)
+
+        org_data = project.df2
+        eval_data = project.full_pipeline.predict_proba(project.df1)
+
+        predict_data = pd.DataFrame({"h1n1_vaccine": eval_data[0][:, 1], "seasonal_vaccine": eval_data[1][:, 1]},
+                                    index=project.df2.index)
+        predict_data["h1n1_vaccine"] = predict_data["h1n1_vaccine"].round(0)
+        predict_data["seasonal_vaccine"] = predict_data["seasonal_vaccine"].round(0)
+
+        print("Accuracy Score:", (accuracy_score(org_data, predict_data) * 100).__round__(2), "%\n")
+        print("H1N1 Vaccine Accuracy Score:",
+              (accuracy_score(org_data["h1n1_vaccine"], predict_data["h1n1_vaccine"]) * 100).__round__(2), "%")
+        print("Seasonal Vaccine Accuracy Score:",
+              (accuracy_score(org_data["seasonal_vaccine"], predict_data["seasonal_vaccine"]) * 100).__round__(2),
+              "%\n")
+
+        # auc-roc curve chart for training set
+        fig, ax = plt.subplots(1, 2, figsize=(6, 3))
+
+        project.plot_roc(project.y_eval['h1n1_vaccine'], project.eval_predict_set['h1n1_vaccine'],
+                         'h1n1_vaccine', ax=ax[0])
+        project.plot_roc(project.y_eval['seasonal_vaccine'], project.eval_predict_set['seasonal_vaccine'],
+                         'seasonal_vaccine', ax=ax[1])
+        fig.tight_layout()
+        plt.show()
+
+    # option 3
+    if selected == '3':
+        # test set prediction
+        print(project.test_predict_set)
+
+        print("* The chart shows you the vaccination status proportion of the test set population. \n "
+              "  0 means no vaccine received and 1 means vaccine received. \n")
+        project.test_set()
+
+        project.search_participant(
+            int(input("Please enter the participant's id you would like to look up between 26707 and 53414: ")))
